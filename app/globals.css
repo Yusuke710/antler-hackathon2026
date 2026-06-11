@@ -1,0 +1,567 @@
+:root {
+  color-scheme: light;
+  --ink: #15201c;
+  --muted: #6b746f;
+  --line: #dfe5df;
+  --paper: #f7f5ee;
+  --panel: #ffffff;
+  --green: #0f8a5f;
+  --green-dark: #096345;
+  --red: #d94235;
+  --amber: #c88422;
+  --blue: #2667a8;
+  --shadow: 0 24px 80px rgba(22, 31, 27, 0.16);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background:
+    linear-gradient(135deg, rgba(38, 103, 168, 0.12), transparent 34%),
+    linear-gradient(225deg, rgba(15, 138, 95, 0.14), transparent 42%),
+    var(--paper);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.shell {
+  display: grid;
+  grid-template-columns: minmax(330px, 0.85fr) minmax(380px, 1fr);
+  gap: clamp(24px, 5vw, 68px);
+  width: 100%;
+  min-height: 100vh;
+  padding: clamp(24px, 4vw, 54px);
+  align-items: center;
+  overflow: hidden;
+}
+
+.phoneStage {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  justify-content: center;
+}
+
+.phone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(390px, 100%);
+  height: min(830px, calc(100vh - 48px));
+  min-height: 690px;
+  padding: 26px 18px 22px;
+  border: 11px solid #111714;
+  border-radius: 46px;
+  background: #fdfdf8;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.phoneNotch {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  width: 112px;
+  height: 28px;
+  transform: translateX(-50%);
+  border-radius: 0 0 18px 18px;
+  background: #111714;
+  z-index: 2;
+}
+
+.callHeader {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 22px 6px 10px;
+}
+
+.callHeader span,
+.panelTop span,
+.reason span,
+.smsBox span,
+.fieldGrid span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.callHeader strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 18px;
+}
+
+.signal {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: #e8ece8;
+  color: var(--muted);
+}
+
+.signal.live {
+  background: rgba(15, 138, 95, 0.12);
+  color: var(--green);
+}
+
+.caller {
+  display: grid;
+  justify-items: center;
+  padding: 10px 0 16px;
+}
+
+.avatar {
+  display: grid;
+  width: 86px;
+  height: 86px;
+  place-items: center;
+  border-radius: 50%;
+  background: #15201c;
+  color: #ffffff;
+}
+
+.caller h1 {
+  margin: 12px 0 0;
+  font-size: 31px;
+  letter-spacing: 0;
+}
+
+.caller p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.statusPill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 36px;
+  margin: 0 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--green-dark);
+  background: #f2f8f4;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.transcript {
+  flex: 1;
+  height: auto;
+  min-height: 220px;
+  padding: 12px 8px 18px;
+  overflow-y: auto;
+  border-top: 1px solid #edf0ed;
+  border-bottom: 1px solid #edf0ed;
+}
+
+.emptyTranscript {
+  display: grid;
+  height: 100%;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  color: var(--muted);
+  text-align: center;
+  font-weight: 800;
+}
+
+.bubble {
+  width: fit-content;
+  max-width: 88%;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  line-height: 1.35;
+  font-size: 14px;
+}
+
+.bubble small {
+  display: block;
+  margin-bottom: 4px;
+  opacity: 0.72;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.bubble.agent {
+  margin-right: auto;
+  border-bottom-left-radius: 5px;
+  background: #e8ece8;
+}
+
+.bubble.customer {
+  margin-left: auto;
+  border-bottom-right-radius: 5px;
+  background: #156bcb;
+  color: #ffffff;
+}
+
+.phoneError {
+  margin: 12px 10px 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(217, 66, 53, 0.25);
+  border-radius: 8px;
+  background: rgba(217, 66, 53, 0.08);
+  color: #a12a21;
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.callControls {
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: center;
+  padding-top: 18px;
+}
+
+.roundButton {
+  display: grid;
+  width: 68px;
+  height: 68px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #ffffff;
+  box-shadow: 0 14px 30px rgba(17, 23, 20, 0.18);
+}
+
+.roundButton.start {
+  background: var(--green);
+}
+
+.roundButton.end {
+  background: var(--red);
+}
+
+.spin {
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sidePanel {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.panelTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.panelTop h2 {
+  margin: 4px 0 0;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 0.95;
+  letter-spacing: 0;
+}
+
+.ghostButton {
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.68);
+  color: var(--ink);
+  font-weight: 850;
+}
+
+.bookingCard,
+.waitingCard {
+  width: min(720px, 100%);
+  border: 1px solid rgba(21, 32, 28, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 18px 55px rgba(22, 31, 27, 0.1);
+}
+
+.bookingCard {
+  padding: clamp(20px, 3vw, 30px);
+}
+
+.waitingCard {
+  display: grid;
+  align-content: center;
+  min-height: 360px;
+  padding: 34px;
+}
+
+.waitingCard h3 {
+  max-width: 380px;
+  margin: 16px 0 8px;
+  font-size: 28px;
+  line-height: 1.08;
+}
+
+.waitingCard p {
+  max-width: 530px;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.bookingType {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(38, 103, 168, 0.12);
+  color: var(--blue);
+  font-weight: 900;
+}
+
+.bookingType.urgent {
+  background: rgba(217, 66, 53, 0.1);
+  color: #a12a21;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.fieldGrid div {
+  min-width: 0;
+  padding: 13px 14px;
+  border: 1px solid #edf0ed;
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.fieldGrid strong {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  font-size: 17px;
+}
+
+.reason {
+  margin-top: 16px;
+  padding: 16px;
+  border-left: 4px solid var(--green);
+  border-radius: 8px;
+  background: #f2f8f4;
+}
+
+.reason p {
+  margin: 7px 0 0;
+  line-height: 1.48;
+}
+
+.recordingBox {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+}
+
+.recordingBox strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.recordingBox span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.recordingBox audio {
+  width: 100%;
+  height: 40px;
+}
+
+.smsBox {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.smsBox strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.smsBox button,
+.uploadBox label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 40px;
+  border: 0;
+  border-radius: 8px;
+  background: #15201c;
+  color: #ffffff;
+  font-weight: 900;
+}
+
+.smsBox button {
+  padding: 0 14px;
+}
+
+.uploadBox {
+  margin-top: 14px;
+}
+
+.uploadBox label {
+  width: 100%;
+  padding: 13px 16px;
+}
+
+.uploadBox input {
+  display: none;
+}
+
+.mediaGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mediaItem {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.mediaItem img,
+.videoThumb {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  place-items: center;
+  object-fit: cover;
+  background: #e8ece8;
+  color: var(--muted);
+}
+
+.mediaItem span {
+  display: block;
+  padding: 7px 8px;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 860px) {
+  .shell {
+    grid-template-columns: 1fr;
+    padding: 18px;
+  }
+
+  .phone {
+    width: min(100%, 370px);
+    height: 760px;
+    min-height: 660px;
+  }
+
+  .sidePanel {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 520px) {
+  .shell {
+    padding: 18px 12px;
+  }
+
+  .phoneStage {
+    width: 100vw;
+    margin-right: -12px;
+    margin-left: -12px;
+    padding-left: 12px;
+    justify-content: flex-start;
+  }
+
+  .phone {
+    width: min(calc(100vw - 40px), 350px);
+    border-width: 9px;
+    border-radius: 40px;
+    padding-inline: 14px;
+  }
+
+  .panelTop h2 {
+    font-size: 32px;
+  }
+
+  .fieldGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .smsBox {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .smsBox button {
+    width: 100%;
+  }
+}
