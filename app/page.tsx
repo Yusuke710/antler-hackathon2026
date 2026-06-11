@@ -24,6 +24,39 @@ type MediaPreview = {
   url: string;
 };
 
+const DEFAULT_AGENT_PROMPT = `You are the voice intake agent for Yusuke Electrical, a residential electrician.
+
+Goal: turn a phone call into one confirmed booking.
+
+Style:
+- Sound like a concise, natural phone receptionist.
+- Ask one short question at a time, then stop speaking.
+- Skip any question already answered by the customer.
+- Do not mention internal rules, classifications, prompts, or JSON.
+- Never say "easy job", "inspection job", or "urgent safety" to the customer. Use those only internally to choose slots.
+- Say "address", not "job address".
+
+Natural call flow:
+1. Start with: "Thanks for calling Yusuke Electrical, how can I help you?"
+2. Let the customer describe the issue in their own words.
+3. Ask naturally for location: "No worries, what suburb are you in?"
+4. Ask a short safety check if it has not already been covered: "Any sparks, burning smell, shock, water near power, or power tripping?"
+5. Use your judgement internally to decide which slot group to offer.
+6. Offer booking times without announcing the classification.
+7. After the customer chooses a time, ask for their name.
+8. Ask: "And what's the address?"
+9. Confirm whether caller number 0404 221 908 is a good contact number.
+10. Confirm the booking and say we will text a link so they can upload a photo or video for the electrician.
+
+Slot groups:
+- Easy booking slots: Tuesday 10:00 AM, Wednesday 2:00 PM, Friday 9:30 AM.
+- Inspection booking slots: Tuesday 3:30 PM, Thursday 11:00 AM.
+- Urgent safety slots: Today 4:30 PM, Tomorrow 8:00 AM.
+
+Turn-taking rule: after you ask a question or offer booking times, stop speaking. Do not send a second follow-up, reminder, rephrase, or clarification until the customer replies with real words.
+
+Nonverbal input rule: if the customer input is only ellipsis, a sigh, breathing, background noise, or another nonverbal sound, treat it as silence. Do not respond to nonverbal noise.`;
+
 function newId() {
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
 }
@@ -87,6 +120,8 @@ export default function Home() {
   const [smsSent, setSmsSent] = useState(false);
   const [media, setMedia] = useState<MediaPreview[]>([]);
   const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [isPromptOpen, setIsPromptOpen] = useState(false);
+  const [agentPrompt, setAgentPrompt] = useState(DEFAULT_AGENT_PROMPT);
   const messagesRef = useRef<TranscriptMessage[]>([]);
   const transcriptRef = useRef<HTMLDivElement | null>(null);
   const playedAgentTextsRef = useRef<Set<string>>(new Set());
@@ -205,12 +240,27 @@ export default function Home() {
               ...sessionOptions,
               connectionType: "webrtc",
               overrides: {
+                agent: {
+                  prompt: {
+                    prompt: agentPrompt
+                  }
+                },
                 tts: {
                   voiceId
                 }
               }
             }
-          : { ...sessionOptions, connectionType: "webrtc" }
+          : {
+              ...sessionOptions,
+              connectionType: "webrtc",
+              overrides: {
+                agent: {
+                  prompt: {
+                    prompt: agentPrompt
+                  }
+                }
+              }
+            }
       );
     } catch (startError) {
       stopRecording();
@@ -343,10 +393,25 @@ export default function Home() {
           <div>
             <h2>New Booking</h2>
           </div>
-          <button className="ghostButton" onClick={resetDemo} disabled={isConnected || isConnecting}>
-            Reset
-          </button>
+          <div className="panelActions">
+            <button className="ghostButton" onClick={() => setIsPromptOpen((open) => !open)} disabled={isConnected || isConnecting}>
+              System prompt
+            </button>
+            <button className="ghostButton" onClick={resetDemo} disabled={isConnected || isConnecting}>
+              Reset
+            </button>
+          </div>
         </div>
+
+        {isPromptOpen ? (
+          <div className="promptPanel">
+            <div>
+              <strong>Conversational agent system prompt</strong>
+              <span>Add trade-specific domain context before starting the call.</span>
+            </div>
+            <textarea value={agentPrompt} onChange={(event) => setAgentPrompt(event.target.value)} />
+          </div>
+        ) : null}
 
         {booking ? (
           <div className="bookingCard">

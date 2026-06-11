@@ -303,6 +303,13 @@ button:disabled {
   letter-spacing: 0;
 }
 
+.panelActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .ghostButton {
   height: 40px;
   padding: 0 16px;
@@ -311,6 +318,44 @@ button:disabled {
   background: rgba(255, 255, 255, 0.68);
   color: var(--ink);
   font-weight: 850;
+}
+
+.promptPanel {
+  display: grid;
+  gap: 10px;
+  width: min(720px, 100%);
+  margin-bottom: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+.promptPanel strong {
+  display: block;
+  margin-bottom: 3px;
+}
+
+.promptPanel span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.promptPanel textarea {
+  width: 100%;
+  min-height: 210px;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfa;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.45;
 }
 
 .bookingCard,
